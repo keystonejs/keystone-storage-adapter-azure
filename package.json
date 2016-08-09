@@ -5,11 +5,13 @@
   "main": "index.js",
   "dependencies": {
     "azure-storage": "^1.2.0",
-    "debug": "^2.2.0",
-    "dotenv": "^2.0.0",
-    "keystone": "^0.4.0-alpha"
+    "debug": "^2.2.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "dotenv": "^2.0.0",
+    "keystone": "^0.4.0-alpha",
+    "mocha": "^3.0.2"
+  },
   "scripts": {
     "test": "mocha test.js"
   },
