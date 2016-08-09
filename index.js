@@ -1,12 +1,10 @@
 var azure = require('azure-storage');
 var debug = require('debug')('keystone-azure');
 
-// azure: {accountName, accountKey, connectionString, container}
-
 // azure-storage will automatically use either the environment variables
 // AZURE_STORAGE_ACCOUNT and AZURE_STORAGE_ACCESS_KEY if they're provided, or
-// AZURE_STORAGE_CONNECTION_STRING. We'll let the user override that
-// configuration by specifying `azure.accountName and accountKey` or `connectionString`.
+// AZURE_STORAGE_CONNECTION_STRING. We'll let the user override that configuration
+// by specifying `azure.accountName and accountKey` or `connectionString`.
 
 // The container configuration is interesting because we could programatically
 // create the container if it doesn't already exist. But if we did so, what
@@ -17,16 +15,15 @@ var debug = require('debug')('keystone-azure');
 
 // This constructor is usually called indirectly by the Storage class in
 // keystone.
-//
-// Azure options should be specified in an `options.azure` field.
-//
+
+// Azure-specific options should be specified in an `options.azure` field.
+
 // The schema can contain the additional fields { container, etag }.
-//
+
 // See README.md for details and usage examples.
 
 function AzureAdapter (options, schema) {
-	var azureOptions = options.azure;
-	if (!azureOptions) throw Error('Azure storage options missing');
+	var azureOptions = options.azure || {};
 	this.options = options;
 
 	if (azureOptions.accountName || azureOptions.connectionString) {
