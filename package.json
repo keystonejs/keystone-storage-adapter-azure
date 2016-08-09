@@ -1,6 +1,6 @@
 {
   "name": "keystone-storage-adapter-azure",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Azure storage adapter for keystone",
   "main": "index.js",
   "dependencies": {
