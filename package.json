@@ -9,11 +9,13 @@
   },
   "devDependencies": {
     "dotenv": "^2.0.0",
+    "eslint": "^3.2.2",
     "keystone": "^0.4.0-alpha",
     "mocha": "^3.0.2"
   },
   "scripts": {
-    "test": "mocha test.js"
+    "test": "eslint . && mocha test.js",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
