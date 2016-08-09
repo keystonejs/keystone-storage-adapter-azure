@@ -1,5 +1,11 @@
+// Mirroring keystone 0.4's support of node 0.12.
+var assign = require('object-assign');
 var azure = require('azure-storage');
 var debug = require('debug')('keystone-azure');
+
+var defaultAzureOptions = {
+	container: process.env.AZURE_STORAGE_CONTAINER,
+};
 
 // azure-storage will automatically use either the environment variables
 // AZURE_STORAGE_ACCOUNT and AZURE_STORAGE_ACCESS_KEY if they're provided, or
@@ -23,7 +29,7 @@ var debug = require('debug')('keystone-azure');
 // See README.md for details and usage examples.
 
 function AzureAdapter (options, schema) {
-	var azureOptions = options.azure || {};
+	var azureOptions = assign({}, defaultAzureOptions, options.azure);
 	this.options = options;
 
 	if (azureOptions.accountName || azureOptions.connectionString) {
@@ -38,8 +44,8 @@ function AzureAdapter (options, schema) {
 		this.blobSvc = azure.createBlobService();
 	}
 
-	if (!options.container) {
-		options.container = process.env.AZURE_STORAGE_CONTAINER;
+	if (!azureOptions.container) {
+		azureOptions.container = process.env.AZURE_STORAGE_CONTAINER;
 	}
 
 	// Simply verify that the container setting exists.
