@@ -1,5 +1,8 @@
 /* eslint-env node, mocha */
 
+// NOTE: Requires keystone4 to be linked with npm. Once keystone@0.4 is released
+// we can set that as a devDependency.
+
 // Pull in azure credentials from .env. Your .env file should look like this:
 /*
 AZURE_STORAGE_ACCOUNT=XXXX
