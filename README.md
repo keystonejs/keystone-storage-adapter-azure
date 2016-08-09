@@ -41,4 +41,6 @@ File.add({
 ```
 
 
+# License
 
+Licensed under the standard MIT license. See [LICENSE](license).
