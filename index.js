@@ -3,7 +3,7 @@ var assign = require('object-assign');
 var azure = require('azure-storage');
 var debug = require('debug')('keystone-azure');
 
-var defaultAzureOptions = {
+var DEFAULT_OPTIONS = {
 	container: process.env.AZURE_STORAGE_CONTAINER,
 };
 
@@ -29,14 +29,13 @@ var defaultAzureOptions = {
 // See README.md for details and usage examples.
 
 function AzureAdapter (options, schema) {
-	var azureOptions = assign({}, defaultAzureOptions, options.azure);
-	this.options = options;
+	this.options = assign({}, DEFAULT_OPTIONS, options.azure);
 
-	if (azureOptions.accountName || azureOptions.connectionString) {
+	if (this.options.accountName || this.options.connectionString) {
 		this.blobSvc = azure.createBlobService(
-			azureOptions.accountName || azureOptions.connectionString,
-			azureOptions.accountKey,
-			azureOptions.host
+			this.options.accountName || this.options.connectionString,
+			this.options.accountKey,
+			this.options.host
 		);
 	} else {
 		// If no connection configuration is supplied, azure will pull it from
@@ -45,10 +44,10 @@ function AzureAdapter (options, schema) {
 	}
 
 	// Verify that the container setting exists.
-	if (!azureOptions.container) {
+	if (!this.options.container) {
 		throw Error('Azure storage configuration error: missing container setting');
 	}
-	this.container = azureOptions.container;
+	this.container = this.options.container;
 }
 
 AzureAdapter.compatibilityLevel = 1;
