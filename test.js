@@ -11,14 +11,14 @@ AZURE_CONTAINER=XXX
 // blobs.
 
 require('dotenv').config();
-const S3Adapter = require('./index');
+const AzureAdapter = require('./index');
 
 describe('azure file field', function () {
 	beforeEach(function () {
 		// this.timeout(10000);
 	});
 
-	require('keystone/test/fileadapter')(S3Adapter, {
+	require('keystone/test/fileadapter')(AzureAdapter, {
 		azure: {
 			container: process.env.AZURE_CONTAINER,
 		},
