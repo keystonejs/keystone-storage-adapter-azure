@@ -41,6 +41,10 @@ function AzureAdapter (options, schema) {
 		this.blobSvc = azure.createBlobService();
 	}
 
+	if (!options.container) {
+		options.container = process.env.AZURE_STORAGE_CONTAINER;
+	}
+
 	// Simply verify that the container setting exists.
 	if (!azureOptions.container) {
 		throw Error('Azure storage configuration error: missing container setting');
