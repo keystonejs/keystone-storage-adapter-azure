@@ -1,10 +1,20 @@
+/*
+TODO
+- Check whether files exist before uploading (will always overwrite as-is)
+- Support multiple retry attempts if a file exists (see FS Adapter)
+*/
+
 // Mirroring keystone 0.4's support of node 0.12.
 var assign = require('object-assign');
 var azure = require('azure-storage');
+var ensureCallback = require('keystone-storage-namefunctions/ensureCallback');
+var nameFunctions = require('keystone-storage-namefunctions');
+
 var debug = require('debug')('keystone-azure');
 
 var DEFAULT_OPTIONS = {
 	container: process.env.AZURE_STORAGE_CONTAINER,
+	generateFilename: nameFunctions.randomFilename,
 };
 
 // azure-storage will automatically use either the environment variables
@@ -48,6 +58,9 @@ function AzureAdapter (options, schema) {
 		throw Error('Azure storage configuration error: missing container setting');
 	}
 	this.container = this.options.container;
+
+	// Ensure the generateFilename option takes a callback
+	this.options.generateFilename = ensureCallback(this.options.generateFilename);
 }
 
 AzureAdapter.compatibilityLevel = 1;
@@ -67,8 +80,6 @@ AzureAdapter.SCHEMA_FIELD_DEFAULTS = {
 
 AzureAdapter.prototype.uploadFile = function (file, callback) {
 	var self = this;
-	// TODO: Chat to Jed to decide how to share the generateFilename code from the
-	// keystone Storage class.
 	this.options.generateFilename(file, 0, function (err, blobName) {
 		if (err) return callback(err);
 

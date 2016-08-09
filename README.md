@@ -17,6 +17,7 @@ var storage = new keystone.Storage({
     accountName: 'myaccount', // required; defaults to env.AZURE_STORAGE_ACCOUNT
     accountKey: 'secret', // required; defaults to env.AZURE_STORAGE_ACCESS_KEY
     container: 'mycontainer', // required; defaults to env.AZURE_STORAGE_CONTAINER
+    generateFilename: keystone.Storage.randomFilename, // default
   },
   schema: {
     container: true, // optional; store the referenced container in the database
@@ -44,6 +45,8 @@ The adapter requires an additional `azure` field added to the storage options. I
 - **accountKey**: *(required)* Azure access key. Defaults to `process.env.AZURE_STORAGE_ACCESS_KEY`
 
 - **container**: *(required)* Azure blob store container to store files in. Defaults to `process.env.AZURE_STORAGE_CONTAINER`
+
+- **generateFilename**: *(optional)* Method to generate the filename. See [keystone-storage-namefunctions](https://github.com/keystonejs/keystone-storage-namefunctions)
 
 
 ### Schema
