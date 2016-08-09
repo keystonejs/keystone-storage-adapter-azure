@@ -51,6 +51,19 @@ function AzureAdapter (options, schema) {
 
 AzureAdapter.compatibilityLevel = 1;
 
+// All the extra schema fields supported by this adapter.
+AzureAdapter.SCHEMA_TYPES = {
+	filename: String,
+	container: String,
+	etag: String,
+};
+
+AzureAdapter.SCHEMA_FIELD_DEFAULTS = {
+	filename: true,
+	container: false,
+	etag: false,
+};
+
 AzureAdapter.prototype.uploadFile = function (file, callback) {
 	var self = this;
 	// TODO: Chat to Jed to decide how to share the generateFilename code from the
