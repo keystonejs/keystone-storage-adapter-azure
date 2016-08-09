@@ -51,7 +51,7 @@ The adapter requires an additional `azure` field added to the storage options. I
 
 ### Schema
 
-The S3 adapter supports all the standard Keystone file schema fields. It also supports storing the following values per-file:
+The Azure adapter supports all the standard Keystone file schema fields. It also supports storing the following values per-file:
 
 - **container**: The blob store container for the file can be stored in the database. If this is present when reading or deleting files, it will be used instead of looking at the adapter configuration. The effect of this is that you can have some (eg, old) files in your collection stored in different container.
 
