@@ -1,9 +1,4 @@
-// The keystone azure blob storage adapter. See README.md for usage.
 var azure = require('azure-storage');
-
-// var pathlib = require('path');
-// Mirroring keystone 0.4's support of node 0.12.
-// var assign = require('object-assign');
 var debug = require('debug')('keystone-azure');
 
 // azure: {accountName, accountKey, connectionString, container}
@@ -22,11 +17,13 @@ var debug = require('debug')('keystone-azure');
 
 // This constructor is usually called indirectly by the Storage class in
 // keystone.
+//
 // Azure options should be specified in an `options.azure` field.
 //
-// The schema can contain the additional fields {container, etag}.
+// The schema can contain the additional fields { container, etag }.
 //
 // See README.md for details and usage examples.
+
 function AzureAdapter (options, schema) {
 	var azureOptions = options.azure;
 	if (!azureOptions) throw Error('Azure storage options missing');
@@ -36,7 +33,8 @@ function AzureAdapter (options, schema) {
 		this.blobSvc = azure.createBlobService(
 			azureOptions.accountName || azureOptions.connectionString,
 			azureOptions.accountKey,
-			azureOptions.host);
+			azureOptions.host
+		);
 	} else {
 		// If no connection configuration is supplied, azure will pull it from
 		// environment variables.
