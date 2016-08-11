@@ -98,8 +98,18 @@ AzureAdapter.prototype.getFileURL = function (file) {
 
 AzureAdapter.prototype.removeFile = function (file, callback) {
 	this.blobSvc.deleteBlob(
-		file.container || this.azureOptions.container, file.filename, callback
+		file.container || this.options.azure.container, file.filename, callback
 	);
+};
+
+// Check if a file with the specified filename already exists. Callback called
+// with the file headers if the file exists, null otherwise.
+AzureAdapter.prototype.fileExists = function (filename, callback) {
+	this.blobSvc.getBlobProperties(this.options.azure.container, filename, function (err, res) {
+		if (err && err.code === 'NotFound') return callback();
+		if (err) return callback(err);
+		callback(null, res);
+	});
 };
 
 module.exports = AzureAdapter;
