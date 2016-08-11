@@ -60,6 +60,11 @@ The main use of this is to allow slow data migrations. If you *don't* store thes
 - **etag**: The etag of the stored item. This is equal to the MD5 sum of the file content.
 
 
+### Known issues
+
+- The adapter always overwrites files regardless of overwrite options.
+- The mimetype does not get set correctly when uploading files.
+
 # License
 
 Licensed under the standard MIT license. See [LICENSE](license).
