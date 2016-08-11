@@ -1,10 +1,13 @@
 /* eslint-env node, mocha */
 
+// NOTE: Requires keystone4 to be linked with npm. Once keystone@0.4 is released
+// we can set that as a devDependency.
+
 // Pull in azure credentials from .env. Your .env file should look like this:
 /*
-AZURE_STORAGE_ACCOUNT=XXX
-AZURE_STORAGE_ACCESS_KEY=XXX
-AZURE_CONTAINER=XXX
+AZURE_STORAGE_ACCOUNT=XXXX
+AZURE_STORAGE_ACCESS_KEY=XXXX
+AZURE_STORAGE_CONTAINER=XXXX
 */
 // The adapter also will not create the storage container for you, so you'll
 // need to do that before running the test. It should have publically readable
@@ -23,9 +26,7 @@ describe('azure file field', function () {
 	});
 
 	require('keystone/test/fileadapter')(AzureAdapter, {
-		azure: {
-			container: process.env.AZURE_CONTAINER,
-		},
+		azure: { /* use environment variables */ },
 	}, {
 		filename: true,
 		size: true,

@@ -1,17 +1,26 @@
-// The keystone azure blob storage adapter. See README.md for usage.
-var azure = require('azure-storage');
+/*
+TODO
+- Check whether files exist before uploading (will always overwrite as-is)
+- Support multiple retry attempts if a file exists (see FS Adapter)
+*/
 
-// var pathlib = require('path');
 // Mirroring keystone 0.4's support of node 0.12.
-// var assign = require('object-assign');
+var assign = require('object-assign');
+var azure = require('azure-storage');
+var ensureCallback = require('keystone-storage-namefunctions/ensureCallback');
+var nameFunctions = require('keystone-storage-namefunctions');
+
 var debug = require('debug')('keystone-azure');
 
-// azure: {accountName, accountKey, connectionString, container}
+var DEFAULT_OPTIONS = {
+	container: process.env.AZURE_STORAGE_CONTAINER,
+	generateFilename: nameFunctions.randomFilename,
+};
 
 // azure-storage will automatically use either the environment variables
 // AZURE_STORAGE_ACCOUNT and AZURE_STORAGE_ACCESS_KEY if they're provided, or
-// AZURE_STORAGE_CONNECTION_STRING. We'll let the user override that
-// configuration by specifying `azure.accountName and accountKey` or `connectionString`.
+// AZURE_STORAGE_CONNECTION_STRING. We'll let the user override that configuration
+// by specifying `azure.accountName and accountKey` or `connectionString`.
 
 // The container configuration is interesting because we could programatically
 // create the container if it doesn't already exist. But if we did so, what
@@ -22,40 +31,55 @@ var debug = require('debug')('keystone-azure');
 
 // This constructor is usually called indirectly by the Storage class in
 // keystone.
-// Azure options should be specified in an `options.azure` field.
-//
-// The schema can contain the additional fields {container, etag}.
-//
-// See README.md for details and usage examples.
-function AzureAdapter (options, schema) {
-	var azureOptions = options.azure;
-	if (!azureOptions) throw Error('Azure storage options missing');
-	this.options = options;
 
-	if (azureOptions.accountName || azureOptions.connectionString) {
+// Azure-specific options should be specified in an `options.azure` field.
+
+// The schema can contain the additional fields { container, etag }.
+
+// See README.md for details and usage examples.
+
+function AzureAdapter (options, schema) {
+	this.options = assign({}, DEFAULT_OPTIONS, options.azure);
+
+	if (this.options.accountName || this.options.connectionString) {
 		this.blobSvc = azure.createBlobService(
-			azureOptions.accountName || azureOptions.connectionString,
-			azureOptions.accountKey,
-			azureOptions.host);
+			this.options.accountName || this.options.connectionString,
+			this.options.accountKey,
+			this.options.host
+		);
 	} else {
 		// If no connection configuration is supplied, azure will pull it from
 		// environment variables.
 		this.blobSvc = azure.createBlobService();
 	}
 
-	// Simply verify that the container setting exists.
-	if (!azureOptions.container) {
+	// Verify that the container setting exists.
+	if (!this.options.container) {
 		throw Error('Azure storage configuration error: missing container setting');
 	}
-	this.container = azureOptions.container;
+	this.container = this.options.container;
+
+	// Ensure the generateFilename option takes a callback
+	this.options.generateFilename = ensureCallback(this.options.generateFilename);
 }
 
 AzureAdapter.compatibilityLevel = 1;
 
+// All the extra schema fields supported by this adapter.
+AzureAdapter.SCHEMA_TYPES = {
+	filename: String,
+	container: String,
+	etag: String,
+};
+
+AzureAdapter.SCHEMA_FIELD_DEFAULTS = {
+	filename: true,
+	container: false,
+	etag: false,
+};
+
 AzureAdapter.prototype.uploadFile = function (file, callback) {
 	var self = this;
-	// TODO: Chat to Jed to decide how to share the generateFilename code from the
-	// keystone Storage class.
 	this.options.generateFilename(file, 0, function (err, blobName) {
 		if (err) return callback(err);
 
@@ -98,14 +122,14 @@ AzureAdapter.prototype.getFileURL = function (file) {
 
 AzureAdapter.prototype.removeFile = function (file, callback) {
 	this.blobSvc.deleteBlob(
-		file.container || this.options.azure.container, file.filename, callback
+		file.container || this.options.container, file.filename, callback
 	);
 };
 
 // Check if a file with the specified filename already exists. Callback called
 // with the file headers if the file exists, null otherwise.
 AzureAdapter.prototype.fileExists = function (filename, callback) {
-	this.blobSvc.getBlobProperties(this.options.azure.container, filename, function (err, res) {
+	this.blobSvc.getBlobProperties(this.options.container, filename, function (err, res) {
 		if (err && err.code === 'NotFound') return callback();
 		if (err) return callback(err);
 		callback(null, res);

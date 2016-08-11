@@ -1,16 +1,16 @@
 {
   "name": "keystone-storage-adapter-azure",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Azure storage adapter for keystone",
   "main": "index.js",
   "dependencies": {
     "azure-storage": "^1.2.0",
-    "debug": "^2.2.0"
+    "debug": "^2.2.0",
+    "keystone-storage-namefunctions": "^1.0.0"
   },
   "devDependencies": {
     "dotenv": "^2.0.0",
     "eslint": "^3.2.2",
-    "keystone": "^0.4.0-alpha",
     "mocha": "^3.0.2"
   },
   "scripts": {
