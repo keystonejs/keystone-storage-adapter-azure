@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "Azure storage adapter for keystone",
   "main": "index.js",
+  "author": "Joseph Gentle <me@josephg.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/keystonejs/keystone-storage-adapter-azure",
+  "bugs": {
+    "url": "https://github.com/keystonejs/keystone-storage-adapter-azure/issues"
+  },
   "dependencies": {
     "azure-storage": "^1.2.0",
     "debug": "^2.2.0",
@@ -23,12 +29,9 @@
   },
   "keywords": [
     "azure",
-    "keystone"
-  ],
-  "author": "Joseph Gentle <me@josephg.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/keystonejs/keystone-storage-adapter-azure/issues"
-  },
-  "homepage": "https://github.com/keystonejs/keystone-storage-adapter-azure#readme"
+    "keystone",
+    "keystone-storage",
+    "keystonejs",
+    "storage",
+  ]
 }
