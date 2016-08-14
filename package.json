@@ -33,6 +33,6 @@
     "keystone",
     "keystone-storage",
     "keystonejs",
-    "storage",
+    "storage"
   ]
 }
