@@ -133,6 +133,7 @@ function AzureAdapter (options, schema) {
 			this.options.cdn.profile.endpointName, [`/${container}/${file}`], (error, result, request, response) => {
 				if (error) {
 					debug('CDN purge failed', error);
+					console.error('CDN purge failed', error);
 				}
 			});
 	};
@@ -219,10 +220,10 @@ AzureAdapter.prototype.getFileURL = function (file) {
 AzureAdapter.prototype.removeFile = function (file, callback) {
 	var self = this;
 	var container = file.container || this.options.container;
-
+	debug('Removing file %s', file.filename);
 	this.blobSvc.deleteBlob(container, file.filename, (error) => {
 		if (error) {
-			callback(error);
+			return callback(error);
 		}
 		if (self.options.cdn.purge === true) {
 			self.purgeCdn(container, file.filename);
