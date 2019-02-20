@@ -89,7 +89,7 @@ AzureAdapter.prototype.uploadFile = function (file, callback) {
 			container,
 			blobName,
 			file.path, // original name
-			{ contentType: file.mimetype },
+			{ contentSettings: { contentType: file.mimetype } },
 			function (err, result) {
 				if (err) return callback(err);
 
